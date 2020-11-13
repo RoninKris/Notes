@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Frame extends JFrame implements ActionListener{
+public class Frame extends JFrame{
 
     JButton loginButton;
     Frame(){
@@ -38,16 +38,7 @@ public class Frame extends JFrame implements ActionListener{
         passwordPlaceholder.setFont(new Font("MV Boli", Font.PLAIN, 20));
         passwordPlaceholder.setBounds(710, 295, 150, 25);
 
-        //Buttons
-        loginButton = new JButton();
-        loginButton.setBounds(700, 375, 100, 25);
-        loginButton.addActionListener(this);
-        loginButton.setText("Log in");
-        loginButton.setFocusable(false);
-        loginButton.setFont(new Font("MV Boli", Font.PLAIN, 20));
-        loginButton.setBackground(null);
-        loginButton.setBorder(blackline);
-        loginButton.setContentAreaFilled(false);
+
 
         //TextFields
         JTextField usernameField = new JTextField();
@@ -64,6 +55,17 @@ public class Frame extends JFrame implements ActionListener{
         passwordField.setBorder(BorderFactory.createMatteBorder(0,0,1,0, Color.BLACK));
         passwordField.setFont(new Font("MV Boli", Font.PLAIN, 20));
         passwordField.setHorizontalAlignment(JLabel.CENTER);
+
+        //Buttons
+        loginButton = new JButton();
+        loginButton.setBounds(700, 375, 100, 25);
+        loginButton.addActionListener(e -> Login(usernameField.getText(), passwordField.getText()));
+        loginButton.setText("Log in");
+        loginButton.setFocusable(false);
+        loginButton.setFont(new Font("MV Boli", Font.PLAIN, 20));
+        loginButton.setBackground(null);
+        loginButton.setBorder(blackline);
+        loginButton.setContentAreaFilled(false);
 
         //Frame Cofigurations
         this.setTitle("Note");
@@ -91,10 +93,12 @@ public class Frame extends JFrame implements ActionListener{
         this.add(loginPanel);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==loginButton){
-            System.out.println("Logged in");
+    public void Login(String username, String password){
+        if(username.equals("Admin") && password.equals("admin")){
+            JOptionPane.showMessageDialog(this, "Logged in successfully");
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Incorrect username or password");
         }
     }
 }
