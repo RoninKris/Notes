@@ -4,10 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Frame extends JFrame{
+public class LoginWindow extends JFrame{
 
     JButton loginButton;
-    Frame(){
+    JPasswordField passwordField;
+    LoginWindow(){
         //Borders
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);
 
@@ -48,13 +49,15 @@ public class Frame extends JFrame{
         usernameField.setFont(new Font("MV Boli", Font.PLAIN, 20));
         usernameField.setOpaque(true);
         usernameField.setHorizontalAlignment(JLabel.CENTER);
+        usernameField.addActionListener(e -> FocusPassword(passwordField));
 
-        JPasswordField passwordField = new JPasswordField();
+        passwordField = new JPasswordField();
         passwordField.setBounds(680, 275, 150, 25);
         passwordField.setBackground(null);
         passwordField.setBorder(BorderFactory.createMatteBorder(0,0,1,0, Color.BLACK));
         passwordField.setFont(new Font("MV Boli", Font.PLAIN, 20));
         passwordField.setHorizontalAlignment(JLabel.CENTER);
+        passwordField.addActionListener(e -> Login(usernameField.getText(), passwordField.getText()));
 
         //Buttons
         loginButton = new JButton();
@@ -68,21 +71,20 @@ public class Frame extends JFrame{
         loginButton.setContentAreaFilled(false);
 
         //Frame Cofigurations
+        this.setLayout(null);
         this.setTitle("Note");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(920, 560);
         this.setResizable(false);
         this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.getContentPane().setBackground(new Color(0xF6FCA9)); //Change background color
 
         //Images
         ImageIcon image = new ImageIcon("Images/Icons/note.png");
         this.setIconImage(image.getImage());
 
-        //Content Panes
-        this.getContentPane().setBackground(new Color(0xF6FCA9));
-
         //Frame Initialization
-        this.setLayout(null);
         this.add(label);
         this.add(loginLabel);
         this.add(loginButton);
@@ -93,9 +95,15 @@ public class Frame extends JFrame{
         this.add(loginPanel);
     }
 
+    public void FocusPassword(JPasswordField passwordField){
+        passwordField.requestFocusInWindow();
+    }
+
     public void Login(String username, String password){
         if(username.equals("Admin") && password.equals("admin")){
             JOptionPane.showMessageDialog(this, "Logged in successfully");
+            this.dispose(); //Closes this window
+            new NotesWindow(); //Opens notes window
         }
         else{
             JOptionPane.showMessageDialog(this, "Incorrect username or password");
