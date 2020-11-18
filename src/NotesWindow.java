@@ -4,6 +4,9 @@ import java.awt.*;
 public class NotesWindow extends JFrame {
     JButton testButton;
     NotesWindow(){
+        //Images
+        ImageIcon image = new ImageIcon("Images/Icons/note.png");
+        this.setIconImage(image.getImage());
         //Frame Cofigurations
         this.setLayout(null);
         this.setTitle("Note");

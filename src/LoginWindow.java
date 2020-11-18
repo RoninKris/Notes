@@ -3,10 +3,12 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class LoginWindow extends JFrame{
 
     JButton loginButton;
+    JButton registerButton;
     JPasswordField passwordField;
     LoginWindow(){
         //Borders
@@ -69,6 +71,18 @@ public class LoginWindow extends JFrame{
         loginButton.setBackground(null);
         loginButton.setBorder(blackline);
         loginButton.setContentAreaFilled(false);
+        loginButton.setCursor(Cursor.getPredefinedCursor(12));
+
+        registerButton = new JButton();
+        registerButton.setBounds(700, 410, 100, 25);
+        registerButton.addActionListener(e -> Register());
+        registerButton.setText("Register");
+        registerButton.setFocusable(false);
+        registerButton.setFont(new Font("MV Boli", Font.PLAIN, 20));
+        registerButton.setBackground(null);
+        registerButton.setBorder(blackline);
+        registerButton.setContentAreaFilled(false);
+        registerButton.setCursor(Cursor.getPredefinedCursor(12));
 
         //Frame Cofigurations
         this.setLayout(null);
@@ -88,6 +102,7 @@ public class LoginWindow extends JFrame{
         this.add(label);
         this.add(loginLabel);
         this.add(loginButton);
+        this.add(registerButton);
         this.add(passwordField);
         this.add(usernameField);
         this.add(usernamePlaceholder);
@@ -100,13 +115,39 @@ public class LoginWindow extends JFrame{
     }
 
     public void Login(String username, String password){
-        if(username.equals("Admin") && password.equals("admin")){
-            JOptionPane.showMessageDialog(this, "Logged in successfully");
-            this.dispose(); //Closes this window
-            new NotesWindow(); //Opens notes window
+        this.setCursor(Cursor.getPredefinedCursor(3));
+        //URL Syntax: jdbc:sqlserver://[servername];databaseName=[databasename]
+        String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesAccounts";
+        String user_pass = "roninkris";
+        boolean isCorrect = true;
+        try {
+            //Create a connection between java and sql server
+            Connection connection = DriverManager.getConnection(url, user_pass, user_pass);
+            System.out.println("Connected Successfully");
+            String query = "Select * from account_details";
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while(result.next()){
+                String _username = result.getString("username");
+                String _password = result.getString("password");
+                if(username.equals(_username) && password.equals(_password)){
+                    isCorrect = true;
+                    new NotesWindow();
+                    this.dispose();
+                    break;
+                }
+                else isCorrect = false;
+            }
+            if(!isCorrect) JOptionPane.showMessageDialog(this, "Username or password incorrect");
+            this.setCursor(Cursor.getPredefinedCursor(0));
+            connection.close();
+        } catch (SQLException throwables) {
+            System.out.println("Connection error");
+            throwables.printStackTrace();
         }
-        else{
-            JOptionPane.showMessageDialog(this, "Incorrect username or password");
-        }
+    }
+    public void Register(){
+        new RegisterWindow();
+        this.dispose();
     }
 }
