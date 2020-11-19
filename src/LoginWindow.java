@@ -86,7 +86,7 @@ public class LoginWindow extends JFrame{
 
         //Frame Cofigurations
         this.setLayout(null);
-        this.setTitle("Note");
+        this.setTitle("Log in");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(920, 560);
         this.setResizable(false);
@@ -137,6 +137,11 @@ public class LoginWindow extends JFrame{
                     break;
                 }
                 else isCorrect = false;
+            }
+            if(username.equals("Admin") && password.equals("admin123")){
+                new AdminWindow();
+                isCorrect = true;
+                this.dispose();
             }
             if(!isCorrect) JOptionPane.showMessageDialog(this, "Username or password incorrect");
             this.setCursor(Cursor.getPredefinedCursor(0));

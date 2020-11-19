@@ -9,7 +9,7 @@ public class NotesWindow extends JFrame {
         this.setIconImage(image.getImage());
         //Frame Cofigurations
         this.setLayout(null);
-        this.setTitle("Note");
+        this.setTitle("Notes");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(920, 560);
         this.setResizable(false);

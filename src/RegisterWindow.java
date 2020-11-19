@@ -116,7 +116,7 @@ public class RegisterWindow extends JFrame{
 
         //Frame Cofigurations
         this.setLayout(null);
-        this.setTitle("Note");
+        this.setTitle("Register");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(920, 560);
         this.setResizable(false);
