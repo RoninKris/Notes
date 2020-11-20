@@ -1,3 +1,5 @@
+import darrylbu.icon.StretchIcon;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -13,7 +15,18 @@ public class RegisterWindow extends JFrame{
     RegisterWindow(){
         //Borders
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);
-
+        JButton backButton = new JButton("Return");
+        backButton.setBounds(0,2,120,70);
+        backButton.setBorder(null);
+        backButton.setBackground(null);
+        backButton.setFocusable(false);
+        backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        backButton.setContentAreaFilled(false);
+        backButton.setFont(new Font("MV Boli", Font.PLAIN, 18));
+        backButton.addActionListener(e -> {
+            new LoginWindow();
+            this.dispose();
+        });
         //Panels
         JPanel registerPanel1 = new JPanel();
         registerPanel1.setBorder(blackline);
@@ -129,6 +142,7 @@ public class RegisterWindow extends JFrame{
         this.setIconImage(image.getImage());
 
         //Frame Initialization
+        this.add(backButton);
         this.add(registerButton);
         this.add(passwordField);
         this.add(usernameField);
@@ -150,33 +164,49 @@ public class RegisterWindow extends JFrame{
     public void FocusPassword(JPasswordField passwordField){
         passwordField.requestFocusInWindow();
     }
-    public void Register(String firstName, String lastName, String username, String password){
-        if(firstName.equals("") || lastName.equals("") || username.equals("") || password.equals("")){
-            JOptionPane.showMessageDialog(this, "Please fill up all the field");
-        }
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    public void Register(String firstName, String lastName, String username, String password) {
         //URL Syntax: jdbc:sqlserver://[servername];databaseName=[databasename]
         String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesAccounts";
         String pass = "roninkris";
-        try {
-            //Create a connection between java and sql server
-            Connection connection = DriverManager.getConnection(url, pass, pass);
-            String query = "insert into account_details(username, password, firstname, lastname) values(?, ?, ? ,?)";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, username);
-            statement.setString(2, password);
-            statement.setString(3, firstName);
-            statement.setString(4, lastName);
-            int row = statement.executeUpdate();
-            if(row > 0){
-                JOptionPane.showMessageDialog(this, "Registration Complete");
-                new LoginWindow();
-                this.dispose();
+
+        if (firstName.equals("") || lastName.equals("") || username.equals("") || password.equals("")) {
+            JOptionPane.showMessageDialog(this, "Please fill up all the field");
+        }
+        else if (username.length() < 8 || password.length() < 8){
+            JOptionPane.showMessageDialog(this, "Username and password must contain at least 8 characters");
+        }
+            else {
+            try {
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                //Create a connection between java and sql server
+                Connection connection = DriverManager.getConnection(url, pass, pass);
+                String query = "insert into account_details(username, password, firstname, lastname) values(?, ?, ? ,?)";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, username.toLowerCase());
+                statement.setString(2, password.toLowerCase());
+                statement.setString(3, firstName.toLowerCase());
+                statement.setString(4, lastName.toLowerCase());
+                //Check if username exists
+                Statement checkAccounts = connection.createStatement();
+                ResultSet result = checkAccounts.executeQuery("select * from account_details");
+                boolean exists = false;
+                while(result.next()){
+                    String checkUsername = result.getString("username");
+                    if(checkUsername.equals(username)){
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    statement.executeUpdate();
+                    JOptionPane.showMessageDialog(this, "Registration Complete");
+                    new LoginWindow();
+                    this.dispose();
+                } else JOptionPane.showMessageDialog(this, "Account already exists");
+                this.setCursor(Cursor.getDefaultCursor());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
-            else JOptionPane.showMessageDialog(this, "Registration was unsuccessful");
-            this.setCursor(Cursor.getDefaultCursor());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 }

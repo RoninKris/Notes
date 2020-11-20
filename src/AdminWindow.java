@@ -19,7 +19,19 @@ public class AdminWindow extends JFrame {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(new Color(0xF6FCA9)); //Change background color
-
+        JButton backButton = new JButton("Return");
+        backButton.setBounds(0,450,120,70);
+        backButton.setBorder(null);
+        backButton.setBackground(null);
+        backButton.setFocusable(false);
+        backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        backButton.setContentAreaFilled(false);
+        backButton.setFont(new Font("MV Boli", Font.PLAIN, 18));
+        backButton.addActionListener(e -> {
+            new LoginWindow();
+            this.dispose();
+        });
+        this.add(backButton);
         getTable();
 
     }
@@ -32,7 +44,8 @@ public class AdminWindow extends JFrame {
             String query = "select * from account_details";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
-            String resultText = "<html><table border = 1 style='width: 800; background-color: white;'><th>Username</th>Password<th>First Name</th><th>Last Name</th>";
+            String resultText = "<html><table border = 1 style='width: 800; background-color: white;'>" +
+                    "<th>Username</th>Password<th>First Name</th><th>Last Name</th>";
             int tableHeight = 90, count = 0;
             while(result.next()){
                 count++;
