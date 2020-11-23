@@ -142,8 +142,10 @@ public class LoginWindow extends JFrame{
                 new AdminWindow();
                 isCorrect = true;
                 this.dispose();
+            } else if (username.equals("") || password.equals("")) {
+                JOptionPane.showMessageDialog(this, "Please fill up all the field");
             }
-            if(!isCorrect) JOptionPane.showMessageDialog(this, "Username or password incorrect");
+            else if(!isCorrect) JOptionPane.showMessageDialog(this, "Username or password incorrect");
             this.setCursor(Cursor.getPredefinedCursor(0));
             connection.close();
         } catch (SQLException throwables) {

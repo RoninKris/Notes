@@ -36,7 +36,7 @@ public class NotesWindow extends JFrame {
         //Labels
         JLabel label = new JLabel("Under Maintenance...");
         label.setFont(new Font("MV Boli", Font.PLAIN, 70));
-        label.setBounds(100,0+150,920,70);
+        label.setBounds(100,150,920,70);
 
         //Components initialization
         this.add(label);

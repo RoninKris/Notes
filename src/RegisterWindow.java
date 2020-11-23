@@ -157,7 +157,7 @@ public class RegisterWindow extends JFrame{
         this.add(registerPanel2);
         this.add(label);
     }
-
+    //Moves focus to the next text field
     public void FocusLastName(JTextField lastNameField){
         lastNameField.requestFocusInWindow();
     }
