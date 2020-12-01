@@ -188,7 +188,7 @@ public class RegisterWindow extends JFrame{
                 statement.setString(4, lastName.toLowerCase());
                 //Check if username exists
                 Statement checkAccounts = connection.createStatement();
-                ResultSet result = checkAccounts.executeQuery("select * from account_details");
+                ResultSet result = checkAccounts.executeQuery("select username from account_details");
                 boolean exists = false;
                 while(result.next()){
                     String checkUsername = result.getString("username");

@@ -122,9 +122,9 @@ public class LoginWindow extends JFrame{
         boolean isCorrect = true;
         try {
             //Create a connection between java and sql server
-            Connection connection = DriverManager.getConnection(url, user_pass, user_pass);
+            Connection connection = DriverManager.getConnection(url, user_pass, user_pass); //DriverManger.getConnection(url, username, password)
             System.out.println("Connected Successfully");
-            String query = "Select * from account_details";
+            String query = "Select username, password from account_details";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
             while(result.next()){
@@ -132,10 +132,10 @@ public class LoginWindow extends JFrame{
                 String _password = result.getString("password");
                 if(username.equals(_username) && password.equals(_password)){
                     isCorrect = true;
-                    new NotesWindow();
-                    this.dispose();
-                    break;
-                }
+                new NotesWindow();
+                this.dispose();
+                break;
+            }
                 else isCorrect = false;
             }
             if(username.equals("Admin") && password.equals("admin123")){

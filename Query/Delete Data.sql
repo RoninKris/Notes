@@ -6,4 +6,6 @@ delete from account_details where username = 'juantee';
 delete from account_details where username = 'pedrostone';
 delete from account_details where username = 'therock';
 delete from account_details where username = 'lukeatme';
+delete from account_details where username = 'aimeelao';
+delete from account_details where username = 'aimeelao123';
 select * from account_details;
