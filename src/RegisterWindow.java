@@ -166,7 +166,7 @@ public class RegisterWindow extends JFrame{
     }
     public void Register(String firstName, String lastName, String username, String password) {
         //URL Syntax: jdbc:sqlserver://[servername];databaseName=[databasename]
-        String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesAccounts";
+        String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesDB";
         String pass = "roninkris";
 
         if (firstName.equals("") || lastName.equals("") || username.equals("") || password.equals("")) {

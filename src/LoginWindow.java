@@ -41,8 +41,6 @@ public class LoginWindow extends JFrame{
         passwordPlaceholder.setFont(new Font("MV Boli", Font.PLAIN, 20));
         passwordPlaceholder.setBounds(710, 295, 150, 25);
 
-
-
         //TextFields
         JTextField usernameField = new JTextField();
         usernameField.setBounds(680, 200, 150, 25);
@@ -117,7 +115,7 @@ public class LoginWindow extends JFrame{
     public void Login(String username, String password){
         this.setCursor(Cursor.getPredefinedCursor(3));
         //URL Syntax: jdbc:sqlserver://[servername];databaseName=[databasename]
-        String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesAccounts";
+        String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesDB";
         String user_pass = "roninkris";
         boolean isCorrect = true;
         try {
@@ -132,9 +130,9 @@ public class LoginWindow extends JFrame{
                 String _password = result.getString("password");
                 if(username.equals(_username) && password.equals(_password)){
                     isCorrect = true;
-                new NotesWindow();
-                this.dispose();
-                break;
+                    new NotesWindow(username);
+                    this.dispose();
+                    break;
             }
                 else isCorrect = false;
             }

@@ -3,7 +3,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 
 public class NotesWindow extends JFrame {
-    NotesWindow(){
+    NotesWindow(String username){
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);
         //Images
         ImageIcon image = new ImageIcon("Images/Icons/note.png");
@@ -34,12 +34,11 @@ public class NotesWindow extends JFrame {
         logoutButton.setBounds(395,70+160,115,26);
 
         //Labels
-        JLabel label = new JLabel("Under Maintenance...");
-        label.setFont(new Font("MV Boli", Font.PLAIN, 70));
-        label.setBounds(100,150,920,70);
-
+        JLabel usernameLabel = new JLabel(username);
+        usernameLabel.setFont(new Font("MV Boli", Font.PLAIN, 70));
+        usernameLabel.setBounds(100,150,920,70);
         //Components initialization
-        this.add(label);
+        this.add(usernameLabel);
         this.add(logoutButton);
     }
 

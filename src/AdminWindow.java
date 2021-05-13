@@ -37,7 +37,7 @@ public class AdminWindow extends JFrame {
     }
 
     public void getTable(){
-        String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesAccounts";
+        String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesDB";
         String pass = "roninkris";
         try {
             Connection connection = DriverManager.getConnection(url, pass, pass);
