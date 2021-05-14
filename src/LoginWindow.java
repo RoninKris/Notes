@@ -1,8 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class LoginWindow extends JFrame{
@@ -130,7 +128,7 @@ public class LoginWindow extends JFrame{
                 String _password = result.getString("password");
                 if(username.equals(_username) && password.equals(_password)){
                     isCorrect = true;
-                    new NotesWindow(username);
+                    new HomeWindow(username);
                     this.dispose();
                     break;
             }

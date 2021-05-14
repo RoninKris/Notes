@@ -179,11 +179,12 @@ public class RegisterWindow extends JFrame{
                 //Create a connection between java and sql server
                 Connection connection = DriverManager.getConnection(url, pass, pass);
                 String query = "insert into account_details(username, password, firstname, lastname) values(?, ?, ? ,?)";
-                PreparedStatement statement = connection.prepareStatement(query);
-                statement.setString(1, username.toLowerCase());
-                statement.setString(2, password.toLowerCase());
-                statement.setString(3, firstName.toLowerCase());
-                statement.setString(4, lastName.toLowerCase());
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, username.toLowerCase());
+                preparedStatement.setString(2, password.toLowerCase());
+                preparedStatement.setString(3, firstName.toLowerCase());
+                preparedStatement.setString(4, lastName.toLowerCase());
+                Statement statement = connection.createStatement();
                 //Check if username exists
                 Statement checkAccounts = connection.createStatement();
                 ResultSet result = checkAccounts.executeQuery("select username from account_details");
@@ -196,7 +197,8 @@ public class RegisterWindow extends JFrame{
                     }
                 }
                 if (!exists) {
-                    statement.executeUpdate();
+                    preparedStatement.executeUpdate();
+                    statement.execute("create table " + username + "_table(id int not null primary key identity(1,1), noteText text, dateTimeAdded datetime)");
                     JOptionPane.showMessageDialog(this, "Registration Complete");
                     new LoginWindow();
                     this.dispose();
