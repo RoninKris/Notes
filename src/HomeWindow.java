@@ -16,28 +16,23 @@ public class HomeWindow extends JFrame {
             ResultSet result = statement.executeQuery("select * from " + username + "_table");
             int count = 0;
 
-            while(result.next()){
-                String text = result.getString("noteText");
-                String dateTime = result.getString("dateTimeAdded");
-
+            int xIncrease = 0, yIncrease = 0;
+            for(int row = 0; row < 5; row++){
+                    for(int col = 0; result.next(); col++){
+                        String text = result.getString("noteText");
+                        DisplayNotes(text, xIncrease, yIncrease);
+                        xIncrease+=250;
+                        System.out.println(text);
+                        if(col >= 5) break;
+                    }
+                    if(!result.next()) break;
+                    yIncrease+= 250;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);
-
-        // Preview
-        JLabel imageContainer = new JLabel();
-        imageContainer.setIcon(new ImageIcon(new ImageIcon("Images/note.png").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
-        imageContainer.setBounds(50,50,200,200);
-        JLabel textLabel = new JLabel("<html>To do:<br>- Eat<br>- Sleep<br>- Repeat</html>");
-        textLabel.setVerticalAlignment(JLabel.TOP);
-        textLabel.setBounds(20,50,150,125);
-        textLabel.setFont(new Font("MV Boli", Font.PLAIN, 14));
-        this.add(imageContainer);
-        imageContainer.add(textLabel);
-
         //Images
         ImageIcon image = new ImageIcon("Images/Icons/note.png");
         this.setIconImage(image.getImage());
@@ -47,7 +42,6 @@ public class HomeWindow extends JFrame {
         this.setLayout(null);
         this.setSize(920, 560);
         this.setResizable(false);
-        this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(new Color(0xF6FCA9)); //Change background color
 
@@ -84,7 +78,22 @@ public class HomeWindow extends JFrame {
         this.add(usernameLabel);
         this.add(logoutButton);
         this.add(addButton);
+        this.setVisible(true);
     }
+    /*TODO:
+    *  Add these to ScrollPane and try to wrap them to fit the screen*/
+    void DisplayNotes(String text, int xIncrease, int yIncrease){ //Pass down the text from database. xIncrease and yIncrease is for debug only
+        String newText = text.replaceAll("\r\n", "<br>"); //Replace token \r\n with <br> to display line break
 
+        JLabel imageContainer = new JLabel();
+        imageContainer.setIcon(new ImageIcon(new ImageIcon("Images/note.png").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
+        imageContainer.setBounds(50 + xIncrease,50 + yIncrease,200,200);
+        JLabel textLabel = new JLabel("<html>" + text + "</html>");
+        textLabel.setVerticalAlignment(JLabel.TOP);
+        textLabel.setBounds(20,50,150,125);
+        textLabel.setFont(new Font("MV Boli", Font.PLAIN, 14));
+        imageContainer.add(textLabel);
+        this.add(imageContainer);
+    }
 
 }

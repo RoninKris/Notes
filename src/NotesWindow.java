@@ -146,9 +146,10 @@ public class NotesWindow extends JFrame {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             //Create a connection between java and sql server
             Connection connection = DriverManager.getConnection(url, pass, pass);
+            String newText = text.replaceAll("\n", "\r\n"); //Replace \n with \r\n to add line breaks in sql server
             String query = "insert into " + username + "_table(noteText, dateTimeAdded) values(?, sysdatetime())";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, text.toLowerCase());
+            preparedStatement.setString(1, newText.toLowerCase());
             preparedStatement.execute();
             this.dispose();
         } catch (SQLException throwables) {
