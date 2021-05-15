@@ -65,7 +65,7 @@ public class NotesWindow extends JFrame {
         this.add(backgroundLabel);
     }
     // Constructor for editing/viewing the notes
-    NotesWindow(String username, String text, String dateTime){
+    NotesWindow(String username, int id, String text, String dateTime){
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);
         this.setTitle("Edit");
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -97,7 +97,7 @@ public class NotesWindow extends JFrame {
         scrollPane.setOpaque(false);
 
         JLabel dateTimeLabel = new JLabel(dateTime);
-        dateTimeLabel.setBounds(500,280,70,70);
+        dateTimeLabel.setBounds(300,500,150,150);
 
         JButton doneButton = new JButton();
         doneButton.setBounds(325, 45, 70, 70);
@@ -106,7 +106,7 @@ public class NotesWindow extends JFrame {
         doneButton.setContentAreaFilled(false);
         doneButton.setBorder(null);
         doneButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        doneButton.addActionListener(e -> EditNote(username, textArea.getText()));
+        doneButton.addActionListener(e -> EditNote(id, username, textArea.getText()));
         JButton removeButton = new JButton();
         removeButton.setBounds(580, 500, 70, 70);
         removeButton.setBackground(null);
@@ -114,21 +114,21 @@ public class NotesWindow extends JFrame {
         removeButton.setContentAreaFilled(false);
         removeButton.setBorder(null);
         removeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        removeButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Note Removed"));
+        removeButton.addActionListener(e -> RemoveNote(username, id));
 
         JLabel helpLabel = new JLabel("?");
         helpLabel.setBounds(650, 45, 50, 50);
         helpLabel.setFont(new Font("MV Boli", Font.PLAIN, 50));
         helpLabel.setForeground(new Color(0x9A8D3E));
 
-        helpLabel.setToolTipText("<html>-Click the note to start typing<br>-Click the pushpin to add note<br>-Click the elevated part of paper to remove.</html>");
+        helpLabel.setToolTipText("<html>-Click the note to start editing<br>-Click the pushpin to finish editing note<br>-Click the elevated part of paper to remove.</html>");
         UIManager.put("ToolTip.background", Color.WHITE);
 
         helpLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 
-        JLabel lblNewLabel = new JLabel(new ImageIcon("Images/note.png"));
-        lblNewLabel.setBounds(0, 0, 736, 591);
+        JLabel noteLabel = new JLabel(new ImageIcon("Images/note.png"));
+        noteLabel.setBounds(0, 0, 736, 591);
 
         this.add(scrollPane);
         this.add(doneButton);
@@ -136,7 +136,8 @@ public class NotesWindow extends JFrame {
         this.add(removeButton);
 
         this.add(helpLabel);
-        this.add(lblNewLabel);
+        this.add(noteLabel);
+        noteLabel.add(dateTimeLabel);
     }
     void AddNote(String username, String text){
         //URL Syntax: jdbc:sqlserver://[servername];databaseName=[databasename]
@@ -155,8 +156,9 @@ public class NotesWindow extends JFrame {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        new HomeWindow(username);
     }
-    void EditNote(String username, String text){
+    void EditNote(int id, String username, String text){
         //URL Syntax: jdbc:sqlserver://[servername];databaseName=[databasename]
         String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesDB";
         String pass = "roninkris";
@@ -164,16 +166,29 @@ public class NotesWindow extends JFrame {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             //Create a connection between java and sql server
             Connection connection = DriverManager.getConnection(url, pass, pass);
-            String query = "insert into " + username + "_table(noteText, dateTimeAdded) values(?, sysdatetime())";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, text.toLowerCase());
-            preparedStatement.execute();
+            String query = "update " + username + "_table set noteText = '" + text + "', dateTimeAdded = sysdatetime() where id = " + id;
+            Statement statement = connection.createStatement();
+            statement.execute(query);
             this.dispose();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        new HomeWindow(username);
     }
-    void RemoveNote(String username){
-
+    void RemoveNote(String username, int id){
+        //URL Syntax: jdbc:sqlserver://[servername];databaseName=[databasename]
+        String url = "jdbc:sqlserver://DESKTOP-GPEFG8S;databaseName=NotesDB";
+        String pass = "roninkris";
+        try {
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            //Create a connection between java and sql server
+            Connection connection = DriverManager.getConnection(url, pass, pass);
+            Statement statement = connection.createStatement();
+            statement.execute("delete from " + username + "_table where id = " + id);
+            this.dispose();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        new HomeWindow(username);
     }
 }

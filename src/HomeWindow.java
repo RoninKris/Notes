@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,17 +13,19 @@ public class HomeWindow extends JFrame {
 
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panel.setLayout(new WrapLayout(WrapLayout.LEFT));
         panel.setBounds(30,50,850,430);
         panel.setBackground(new Color(0xF6FCA9));
         try {
             //Create a connection between java and sql server
             Connection connection = DriverManager.getConnection(url, pass, pass);
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery("select * from " + username + "_table");
+            ResultSet result = statement.executeQuery("select id, noteText, convert(varchar, dateTimeAdded, 0) as dateTimeAdded from " + username + "_table");
             while(result.next()){
+                int id = result.getInt("id");
                 String text = result.getString("noteText");
-                panel.add(DisplayNotes(text));
+                String dateTime = result.getString("dateTimeAdded");
+                panel.add(DisplayNotes(username, id, text, dateTime));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -55,7 +58,10 @@ public class HomeWindow extends JFrame {
         logoutButton.setBounds(800,490,115,26);
 
         JButton addButton = new JButton(new ImageIcon(new ImageIcon("Images/Icons/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
-        addButton.addActionListener(e -> new NotesWindow(username));
+        addButton.addActionListener(e -> {
+            new NotesWindow(username);
+            this.dispose();
+        });
         addButton.setBackground(null);
         addButton.setBorder(null);
         addButton.setFocusable(false);
@@ -67,26 +73,57 @@ public class HomeWindow extends JFrame {
         JLabel usernameLabel = new JLabel("Hello, " + username + "!");
         usernameLabel.setFont(new Font("MV Boli", Font.PLAIN, 24));
         usernameLabel.setBounds(380,20,250,25);
+
+        //ScrollPane
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBounds(30,50,850,430);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setBackground(new Color(0xD1BF56));
+        scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = new Color(0xf0dc64);
+            }
+        });
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setOpaque(false);
         //Components initialization
         this.add(usernameLabel);
         this.add(logoutButton);
         this.add(addButton);
-        this.add(panel);
+        this.add(scrollPane);
         this.setVisible(true);
     }
-    /*TODO:
-    *  Add these to ScrollPane and try to wrap them to fit the screen*/
-    JLabel DisplayNotes(String text){ //Pass down the text from database. xIncrease and yIncrease is for debug only
+    JLabel DisplayNotes(String username, int id, String text, String dateTime){ //Pass down the text from database. xIncrease and yIncrease is for debug only
         String newText = text.replaceAll("\r\n", "<br>"); //Replace token \r\n with <br> to display line break
 
+//        JLabel imageContainer = new JLabel();
+//        imageContainer.setIcon(new ImageIcon(new ImageIcon("Images/note.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
+//        imageContainer.setBounds(50,50,200,200);
+//        JLabel textLabel = new JLabel("<html>" + text + "</html>");
+//        textLabel.setVerticalAlignment(JLabel.TOP);
+//        textLabel.setBounds(20,50,150,125);
+//        textLabel.setFont(new Font("MV Boli", Font.PLAIN, 14));
+//        imageContainer.add(textLabel);
+//        this.add(imageContainer);
+//        return imageContainer;
         JLabel imageContainer = new JLabel();
         imageContainer.setIcon(new ImageIcon(new ImageIcon("Images/note.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
         imageContainer.setBounds(50,50,200,200);
-        JLabel textLabel = new JLabel("<html>" + text + "</html>");
-        textLabel.setVerticalAlignment(JLabel.TOP);
-        textLabel.setBounds(20,50,150,125);
-        textLabel.setFont(new Font("MV Boli", Font.PLAIN, 14));
-        imageContainer.add(textLabel);
+        JButton textButton = new JButton("<html>" + text + "</html>");
+        textButton.setVerticalAlignment(JLabel.TOP);
+        textButton.setBounds(20,50,150,125);
+        textButton.setFont(new Font("MV Boli", Font.PLAIN, 14));
+        textButton.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        textButton.setContentAreaFilled(false);
+        textButton.setBorder(null);
+        textButton.setFocusable(false);
+        textButton.addActionListener(e -> {
+            new NotesWindow(username, id, text, dateTime);
+            this.dispose();
+        });
+        imageContainer.add(textButton);
         this.add(imageContainer);
         return imageContainer;
     }
