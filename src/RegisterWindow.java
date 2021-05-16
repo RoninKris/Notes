@@ -180,7 +180,7 @@ public class RegisterWindow extends JFrame{
                 Connection connection = DriverManager.getConnection(url, pass, pass);
                 String query = "insert into account_details(username, password, firstname, lastname) values(?, ?, ? ,?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setString(1, username.toLowerCase());
+                preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
                 preparedStatement.setString(3, firstName.toLowerCase());
                 preparedStatement.setString(4, lastName.toLowerCase());
