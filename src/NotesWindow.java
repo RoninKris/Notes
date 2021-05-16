@@ -98,6 +98,8 @@ public class NotesWindow extends JFrame {
 
         JLabel dateTimeLabel = new JLabel(dateTime);
         dateTimeLabel.setBounds(300,500,150,150);
+        dateTimeLabel.setForeground(new Color(0x9A8D3E));
+        dateTimeLabel.setFont(new Font("MV Boli", Font.BOLD, 11));
 
         JButton doneButton = new JButton();
         doneButton.setBounds(325, 45, 70, 70);
@@ -150,7 +152,7 @@ public class NotesWindow extends JFrame {
             String newText = text.replaceAll("\n", "\r\n"); //Replace \n with \r\n to add line breaks in sql server
             String query = "insert into " + username + "_table(noteText, dateTimeAdded) values(?, sysdatetime())";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, newText.toLowerCase());
+            preparedStatement.setString(1, newText);
             preparedStatement.execute();
             this.dispose();
         } catch (SQLException throwables) {

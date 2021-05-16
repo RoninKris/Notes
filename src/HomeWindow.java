@@ -21,11 +21,21 @@ public class HomeWindow extends JFrame {
             Connection connection = DriverManager.getConnection(url, pass, pass);
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("select id, noteText, convert(varchar, dateTimeAdded, 0) as dateTimeAdded from " + username + "_table");
+            int count = 0;
             while(result.next()){
+                count++;
                 int id = result.getInt("id");
                 String text = result.getString("noteText");
                 String dateTime = result.getString("dateTimeAdded");
                 panel.add(DisplayNotes(username, id, text, dateTime));
+            }
+            //If there are no notes yet, do this
+            JLabel emptyLabel = new JLabel("You have no notes yet.");
+            emptyLabel.setFont(new Font("MV Boli", Font.BOLD, 35));
+            emptyLabel.setForeground(new Color(0x9A8D3E));
+            if(count == 0){
+                panel.setLayout(new GridBagLayout());
+                panel.add(emptyLabel);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

@@ -181,7 +181,7 @@ public class RegisterWindow extends JFrame{
                 String query = "insert into account_details(username, password, firstname, lastname) values(?, ?, ? ,?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setString(1, username.toLowerCase());
-                preparedStatement.setString(2, password.toLowerCase());
+                preparedStatement.setString(2, password);
                 preparedStatement.setString(3, firstName.toLowerCase());
                 preparedStatement.setString(4, lastName.toLowerCase());
                 Statement statement = connection.createStatement();
