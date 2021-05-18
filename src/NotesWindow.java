@@ -2,9 +2,12 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.*;
 
 public class NotesWindow extends JFrame {
+
     // Constructor for adding a new note
     NotesWindow(String username){
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);
@@ -16,8 +19,16 @@ public class NotesWindow extends JFrame {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(new Color(0xF6FCA9)); //Change background color
+        //This reopens the homewindow after closing the noteswindow
+        this.addWindowListener(new WindowAdapter() {
+           @Override
+           public void windowClosing(WindowEvent e) {
+               super.windowClosed(e);
+               new HomeWindow(username);
+           }
+       });
 
-        JTextArea textArea = new JTextArea();
+                JTextArea textArea = new JTextArea();
         textArea.setFont(new Font("MV Boli", Font.ITALIC, 20));
         textArea.setLineWrap(true);
         textArea.setBackground(new Color(255,255,255,0));

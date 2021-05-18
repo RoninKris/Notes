@@ -3,8 +3,6 @@ import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.sql.*;
-import java.util.ArrayList;
-
 public class HomeWindow extends JFrame {
     HomeWindow(String username){
         //URL Syntax: jdbc:sqlserver://[servername];databaseName=[databasename]
@@ -108,20 +106,10 @@ public class HomeWindow extends JFrame {
     JLabel DisplayNotes(String username, int id, String text, String dateTime){ //Pass down the text from database. xIncrease and yIncrease is for debug only
         String newText = text.replaceAll("\r\n", "<br>"); //Replace token \r\n with <br> to display line break
 
-//        JLabel imageContainer = new JLabel();
-//        imageContainer.setIcon(new ImageIcon(new ImageIcon("Images/note.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
-//        imageContainer.setBounds(50,50,200,200);
-//        JLabel textLabel = new JLabel("<html>" + text + "</html>");
-//        textLabel.setVerticalAlignment(JLabel.TOP);
-//        textLabel.setBounds(20,50,150,125);
-//        textLabel.setFont(new Font("MV Boli", Font.PLAIN, 14));
-//        imageContainer.add(textLabel);
-//        this.add(imageContainer);
-//        return imageContainer;
         JLabel imageContainer = new JLabel();
         imageContainer.setIcon(new ImageIcon(new ImageIcon("Images/note.png").getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
         imageContainer.setBounds(50,50,200,200);
-        JButton textButton = new JButton("<html>" + text + "</html>");
+        JButton textButton = new JButton("<html>" + newText + "</html>");
         textButton.setVerticalAlignment(JLabel.TOP);
         textButton.setBounds(20,50,150,125);
         textButton.setFont(new Font("MV Boli", Font.PLAIN, 14));
